@@ -15,24 +15,47 @@ class CustomerController extends Controller
     }
 
     // Store new customer
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'nullable|email|unique:customers,email',
+    //         'phone' => 'nullable|string|max:20',
+    //         'address' => 'nullable|string|max:255',
+    //         'company' => 'nullable|string|max:255',
+    //         'notes' => 'nullable|string|max:500',
+    //     ]);
+
+    //     Customer::create($request->only(['name','email','phone','address','company','notes']));
+
+    //     // After storing, redirect back to the index page so the table updates
+    //     $redirect = auth()->user()->role === 'admin' ? route('admin.customers.index') : route('manager.customers.index');
+
+    //     return redirect($redirect)->with('success', 'Customer created successfully!');
+    // }
+
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:customers,email',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'company' => 'nullable|string|max:255',
-            'notes' => 'nullable|string|max:500',
-        ]);
+{
+    $request->validate([
+        'name' => 'nullable|string|max:255',
+        'email' => 'nullable|email|unique:customers,email',
+        'phone' => 'nullable|string|max:20',
+        'address' => 'nullable|string|max:255',
+        'company' => 'nullable|string|max:255',
+        'notes' => 'nullable|string|max:500',
+    ]);
 
-        Customer::create($request->only(['name','email','phone','address','company','notes']));
+    Customer::create($request->only([
+        'name','email','phone','address','company','notes'
+    ]));
 
-        // After storing, redirect back to the index page so the table updates
-        $redirect = auth()->user()->role === 'admin' ? route('admin.customers.index') : route('manager.customers.index');
+    $redirect = auth()->user()->role === 'admin'
+        ? route('admin.customers.index')
+        : route('manager.customers.index');
 
-        return redirect($redirect)->with('success', 'Customer created successfully!');
-    }
+    return redirect($redirect)->with('success', 'Customer created successfully!');
+}
+
 
     // Delete customer
     public function destroy(Customer $customer)
