@@ -105,7 +105,9 @@
     <div class="header">
         <img src="{{ public_path('logobloomp.png') }}">
         <h2>INVOICE</h2>
-        <small>Invoice No: {{ $invoice->invoice_number }}</small>
+        <small>Invoice No: {{ $invoice->invoice_number }}</small>>
+        <h2>Sales Man</h2>
+        <small>{{ $invoice->user->name }}</small>
     </div>
 
     <!-- CUSTOMER DETAILS -->

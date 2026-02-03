@@ -239,38 +239,51 @@ public function editPayment(Invoice $invoice)
 }
 
 // Update payment
-public function updatePayment(Request $request, Invoice $invoice)
+// public function updatePayment(Request $request, Invoice $invoice)
+// {
+//     $request->validate([
+//         'payment_type' => 'required|in:full,part',
+//         'amount_paid' => 'nullable|numeric|min:0',
+//     ]);
+
+//     $totalAmount = $invoice->total;
+
+//     if ($request->payment_type === 'full') {
+//         // FULL PAYMENT MODE — no calculation rubbish
+//         $invoice->amount_paid = $totalAmount;
+//         $invoice->balance = 0;
+//         $invoice->payment_status = 'paid';
+//         $invoice->payment_type = 'full';
+//     } else {
+//         // PART PAYMENT MODE — normal accumulation
+//         $newAmountPaid = $invoice->amount_paid + $request->amount_paid;
+//         $balance = $totalAmount - $newAmountPaid;
+
+//         $invoice->amount_paid = $newAmountPaid;
+//         $invoice->balance = max(0, $balance);
+//         $invoice->payment_status = $balance <= 0 ? 'paid' : 'owing';
+//         $invoice->payment_type = 'part';
+//     }
+
+//     $invoice->save();
+
+//     return redirect()
+//         ->route(Auth::user()->role . '.invoices.owing')
+//         ->with('success', 'Payment updated successfully!');
+// }
+
+public function updatePayment(Invoice $invoice)
 {
-    $request->validate([
-        'payment_type' => 'required|in:full,part',
-        'amount_paid' => 'nullable|numeric|min:0',
+    $invoice->update([
+        'amount_paid' => $invoice->total,
+        'balance' => 0,
+        'payment_status' => 'paid',
+        'payment_type' => 'full',
     ]);
 
-    $totalAmount = $invoice->total;
-
-    if ($request->payment_type === 'full') {
-        // FULL PAYMENT MODE — no calculation rubbish
-        $invoice->amount_paid = $totalAmount;
-        $invoice->balance = 0;
-        $invoice->payment_status = 'paid';
-        $invoice->payment_type = 'full';
-    } else {
-        // PART PAYMENT MODE — normal accumulation
-        $newAmountPaid = $invoice->amount_paid + $request->amount_paid;
-        $balance = $totalAmount - $newAmountPaid;
-
-        $invoice->amount_paid = $newAmountPaid;
-        $invoice->balance = max(0, $balance);
-        $invoice->payment_status = $balance <= 0 ? 'paid' : 'owing';
-        $invoice->payment_type = 'part';
-    }
-
-    $invoice->save();
-
-    return redirect()
-        ->route(Auth::user()->role . '.invoices.owing')
-        ->with('success', 'Payment updated successfully!');
+    return back()->with('success', 'Invoice marked as paid');
 }
+
 
 public function editPaymentcash(Invoice $invoice)
 {
@@ -282,32 +295,44 @@ public function editPaymentcash(Invoice $invoice)
 }
 
 
-// Update payment
-public function updatePaymentcash(Request $request, Invoice $invoice)
+
+public function updatePaymentcash(Invoice $invoice)
 {
-    $request->validate([
-        'payment_type' => 'required|in:full,part',
-        'amount_paid' => 'required|numeric|min:0',
+    $invoice->update([
+        'amount_paid' => $invoice->total,
+        'balance' => 0,
+        'payment_status' => 'paid',
+        'payment_type' => 'full',
     ]);
 
-    $totalAmount = $invoice->total;
-    $newAmountPaid = $invoice->amount_paid + $request->amount_paid;
-
-    // Calculate new balance
-    $balance = $totalAmount - $newAmountPaid;
-
-    $invoice->amount_paid = $newAmountPaid;
-    $invoice->balance = $balance;
-
-    // Update payment type and status
-    $invoice->payment_type = $request->payment_type;
-    $invoice->payment_status = $balance <= 0 ? 'paid' : 'owing';
-
-    $invoice->save();
-
-    return redirect()->route(Auth::user()->role . '.invoices.owing')
-                     ->with('success', 'Payment updated successfully!');
+    return back()->with('success', 'Invoice marked as paid');
 }
+// Update payment
+// public function updatePaymentcash(Request $request, Invoice $invoice)
+// {
+//     $request->validate([
+//         'payment_type' => 'required|in:full,part',
+//         'amount_paid' => 'required|numeric|min:0',
+//     ]);
+
+//     $totalAmount = $invoice->total;
+//     $newAmountPaid = $invoice->amount_paid + $request->amount_paid;
+
+//     // Calculate new balance
+//     $balance = $totalAmount - $newAmountPaid;
+
+//     $invoice->amount_paid = $newAmountPaid;
+//     $invoice->balance = $balance;
+
+//     // Update payment type and status
+//     $invoice->payment_type = $request->payment_type;
+//     $invoice->payment_status = $balance <= 0 ? 'paid' : 'owing';
+
+//     $invoice->save();
+
+//     return redirect()->route(Auth::user()->role . '.invoices.owing')
+//                      ->with('success', 'Payment updated successfully!');
+// }
 
 
 

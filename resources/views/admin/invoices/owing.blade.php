@@ -88,9 +88,11 @@
                                         <a href="{{ route('admin.invoices.edit-payment', $invoice->id) }}" class="btn btn-sm btn-info">Edit</a>
                                         <form action="{{ route('admin.invoices.update-payment', $invoice->id) }}" method="POST" class="d-inline-block">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-success">Mark Paid</button>
+                                            <input type="hidden" name="payment_type" value="full">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Mark Paid
+                                            </button>
                                         </form>
-
                                         <a href="{{ route('admin.invoices.preview', $invoice->id) }}" class="btn btn-sm btn-secondary">
                                             Preview
                                         </a>

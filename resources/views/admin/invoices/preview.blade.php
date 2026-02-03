@@ -152,6 +152,8 @@
                 <td class="text-right">
                     <h2>INVOICE</h2>
                     <div class="muted">#{{ $invoice->invoice_number }}</div>
+                    <h2>Sales Man</h2>
+                    <div class="muted">{{ $invoice->user->name }}</div>
                 </td>
             </tr>
         </table>
